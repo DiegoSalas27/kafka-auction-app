@@ -11,7 +11,7 @@
 # Starting a kafka cluster
 1. Make sure you are in the root of kafka folder. eg: /Users/diegosalas/kafka_2.13-3.1.0
 2. Start Zookeeper: ./bin/zookeeper-server-start.sh config/zookeeper.properties
-3. Start Kafka Server: ./bin/kafka-serever-start.sh config/server.properties
+3. Start Kafka Server: ./bin/kafka-server-start.sh config/server.properties
 
 # Create a topic
 1. Make sure you are in the root of kafka folder. eg: /Users/diegosalas/kafka_2.13-3.1.0

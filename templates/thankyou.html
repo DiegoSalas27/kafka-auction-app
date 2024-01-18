@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Current results (refresh me)</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic">
+    <link rel="stylesheet" href="{{url_for('static', filename='fonts/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/Navigation-Clean.css')}}">
+</head>
+{% block body %}
+<body style="background: rgb(255,255,255); height: 100vh; min-height: fit-content;">
+    <header class="masthead text-white text-center">
+        <div class="overlay" style="background: url({{url_for('static', filename='img/bg-showcase-2.jpg')}});opacity: 0.12;filter: blur(2px) brightness(87%) contrast(200%) grayscale(0%) hue-rotate(152deg) invert(0%);">
+            <figure class="figure" style="background: url({{url_for('static', filename='img/bg-showcase-2.jpg')}});"></figure>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-9 mx-auto">  
+                    <h1 class="mb-5">Highest Bidders!</h1>
+                    {% for bidder in highest_bidders %}   
+                        <div class="alert alert-primary" role="alert">
+                            <p class="mb-0"><strong>email: </strong> {{ bidder.email }}</p>
+                            <p class="mb-0"><strong>amount: </strong> {{ bidder.amount }}</p>
+                        </div>
+                    {% endfor %}
+  
+                    <a
+                    class="btn btn-primary btn-block btn-lg"
+                    style="
+                      background: rgb(180, 7, 7);
+                      border-top-color: rgb(180, 7, 7);
+                      border-right-color: rgb(180, 7, 7);
+                      border-bottom-color: rgb(180, 7, 7);
+                      border-left-style: none;
+                    "
+                    href="/"
+                  >
+                    Beat them!
+                </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+    <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+</body>
+
+</html>
+
+{% endblock %}
