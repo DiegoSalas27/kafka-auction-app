@@ -40,6 +40,7 @@
         <div class="row">
           <div class="col-xl-9 mx-auto">
             <h1 class="mb-5">Coffeeless Programming<br />Voucher Auction</h1>
+            <p>From server: {{server_ip}}</p>
           </div>
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
             <form method="POST" action="" style="display:flex; flex-direction: column; align-items: center;">
@@ -74,9 +75,20 @@
           </div>
         </div>
       </div>
+      <p id="timer"></p>
     </header>
     <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
     <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://localhost:8080/');
+
+      // Event handler for receiving data updates
+      socket.on('update_timer', function(data) {
+          var timer = document.getElementById('timer');
+          timer.textContent = 'Time remaining: ' + data + ' seconds'
+      });
+    </script>
   </body>
 </html>
 

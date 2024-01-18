@@ -9,7 +9,7 @@ class MyKafkaProducer:
         self.public_ip = public_ip
         self.port = port
 
-    def produce(self, email: str, amount: str) -> None:
+    def produce(self, email: str, amount: str, client_ip: str) -> None:
         producer = KafkaProducer(
             bootstrap_servers=f'{self.public_ip}:{self.port}',
             value_serializer=lambda v: json.dumps(v).encode('utf-8')
@@ -17,7 +17,8 @@ class MyKafkaProducer:
 
         data = {
             'email': email,
-            'amount': amount
+            'amount': amount,
+            'client_ip': client_ip
         }
 
         

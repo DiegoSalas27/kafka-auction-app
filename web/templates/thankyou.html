@@ -20,13 +20,7 @@
             <div class="row">
                 <div class="col-xl-9 mx-auto">  
                     <h1 class="mb-5">Highest Bidders!</h1>
-                    {% for bidder in highest_bidders %}   
-                        <div class="alert alert-primary" role="alert">
-                            <p class="mb-0"><strong>email: </strong> {{ bidder.email }}</p>
-                            <p class="mb-0"><strong>amount: </strong> {{ bidder.amount }}</p>
-                        </div>
-                    {% endfor %}
-  
+                    <div id="data-list"></div>  
                     <a
                     class="btn btn-primary btn-block btn-lg"
                     style="
@@ -46,6 +40,35 @@
     </header>
     <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
     <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://localhost:8080/');
+      // Event handler for receiving data updates
+      socket.on('update_highest_bidders', function(data) {
+          debugger
+          var dataList = document.getElementById('data-list');
+          dataList.innerHTML = ''
+
+          for (let i = 0; i < data.length; i++) {
+            var dataItem = document.createElement('div')
+            dataItem.classList.add('alert', 'alert-primary', 'mb-2')
+            dataItem.role = 'alert'
+
+            var dataEmail = document.createElement('p')
+            dataEmail.classList.add('mb-0')
+            dataEmail.textContent = 'email: ' + data[i].email
+
+            var dataAmount = document.createElement('p')
+            dataAmount.classList.add('mb-0')
+            dataAmount.textContent = 'amount: ' + data[i].amount
+
+            dataItem.appendChild(dataEmail)
+            dataItem.appendChild(dataAmount)
+
+            dataList.appendChild(dataItem)
+          }
+      });
+    </script>
 </body>
 
 </html>
