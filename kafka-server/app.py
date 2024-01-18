@@ -23,7 +23,6 @@ def kafka_highest_bidder_consumer():
         highest_bidders.append(message.value)
         put_user(message.value)
         highest_bidders.sort(key=lambda x: x['amount'], reverse=True)
-        print('GOOD JOB', highest_bidders)
         if len(highest_bidders) > 5: # Keeping the last 5 data points
             highest_bidders.pop()
         highestBidderProducer.produce(highest_bidders)

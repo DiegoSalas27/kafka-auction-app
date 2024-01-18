@@ -1,4 +1,4 @@
-# Steps to download kafka and set it up in MAC (installation is almost the same in Windows and Linux)s
+# Steps to download kafka and set it up in MAC (installation is almost the same in Windows and Linux)
 1. Download apache kafka: https://kafka.apache.org/downloads
 2. Unzip the package and place in in your user folder. eg: /Users/diegosalas/kafka_2.13-3.1.0
 3. Create a kafka_logs/zookeeper and a kafka_logs/server_logs folder in the same folder where kafka was installed. eg: eg /Users/diegosalas/kafka_logs
@@ -7,6 +7,11 @@
 5. Update server.properties:
 - Uncomment line 31: `listeners=PLAINTEXT://:9092`
 - Update line 60: `log.dirs=YOUR_PATH_TO_SERVER_LOGS`. eg: `log.dirs=/Users/diegosalas/kafka_logs/server_logs`
+
+# Installing in Linux
+1. Install java: sudo apt-get install default-jre
+2. Install kafka: http://www-us.apache.org/dist/kafka/2.x.x/kafka_2.13-3.1.0.tgz
+3. Extract: tar -xzf kafka_2.x-x.x.x.tgz
 
 # Starting a kafka cluster
 1. Make sure you are in the root of kafka folder. eg: /Users/diegosalas/kafka_2.13-3.1.0
