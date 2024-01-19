@@ -40,12 +40,12 @@
     </header>
     <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
     <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
     <script>
-      var socket = io.connect('http://localhost:8080/');
+      var socket = io.connect(window.location.origin);
+      console.log('ORIGIN', window.location.origin)
       // Event handler for receiving data updates
       socket.on('update_highest_bidders', function(data) {
-          debugger
           var dataList = document.getElementById('data-list');
           dataList.innerHTML = ''
 

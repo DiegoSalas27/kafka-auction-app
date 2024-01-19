@@ -2,19 +2,22 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from wtforms import Form, StringField, FloatField, SubmitField
 from wtforms.validators import InputRequired
 from flask_socketio import SocketIO
-from consumer import MyKafkaConsumer
-from producer import MyKafkaProducer
+from flask_cors import CORS
 import socket
 import time
 from threading import Thread
 import json
+import os
 from constants import REALTIME_ANALYTICS, HIGHEST_BIDDERS, TIMER
+from consumer import MyKafkaConsumer
+from producer import MyKafkaProducer
 
-app = Flask(__name__)
-socketio = SocketIO(app)
+application = Flask(__name__)
+CORS(application)
+socketio = SocketIO(application)
 
-public_ip = '127.0.0.1'
-kafka_server_port = '9092'
+public_ip = os.environ['PUBLIC_SERVER_IP']
+kafka_server_port = os.environ['KAFKA_SERVER_PORT']
 
 highest_bidders = []
 timer_thread = None
@@ -46,7 +49,7 @@ def kafka_timer_consumer():
 
 def refresh_highest_bidders():
     global highest_bidders
-    time.sleep(0.5)
+    time.sleep(1)
     socketio.emit('update_highest_bidders', highest_bidders)
 
 Thread(target = kafka_highest_bidder_consumer).start()
@@ -57,7 +60,7 @@ Thread(target = kafka_timer_consumer).start()
 def handle_connect():
     print('Client connected')
 
-@app.route('/', methods=['GET','POST'])
+@application.route('/', methods=['GET','POST'])
 def index():
     form = AuctionSubmissionForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -67,10 +70,10 @@ def index():
 
     return render_template('index.html', form=form, server_ip=server_ip)
 
-@app.route('/thankyou')
+@application.route('/thankyou')
 def thankyou():
     Thread(target = refresh_highest_bidders).start()
     return render_template('thankyou.html')
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=8080) # This will make the Flask app accessible via the EC2's public IP
+    socketio.run(application, host='0.0.0.0', port=8000)

@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from consumer import MyKafkaConsumer
 from producer import MyKafkaProducer
 from constants import HIGHEST_BIDDERS, REALTIME_ANALYTICS, TIMER
@@ -7,6 +8,8 @@ import threading
 import boto3
 
 app = Flask(__name__)
+
+CORS(app)
 
 dynamodb = boto3.resource('dynamodb',region_name='us-east-1')
 kafka_server_port = '9092'
@@ -21,7 +24,7 @@ def kafka_highest_bidder_consumer():
     global highest_bidders
     for message in highestBidderConsumer.getConsumer():
         highest_bidders.append(message.value)
-        put_user(message.value)
+        # put_user(message.value)
         highest_bidders.sort(key=lambda x: x['amount'], reverse=True)
         if len(highest_bidders) > 5: # Keeping the last 5 data points
             highest_bidders.pop()
@@ -36,11 +39,14 @@ def syncTime(duration):
 
 def put_user(user):
     table = dynamodb.Table('users')
+
+    print('user', user)
+
     response = table.put_item(
        Item={
-            'email': user.email,
-            'amount': user.amount,
-            'client_ip': user.client_ip
+            'email': user['email'],
+            'amount': user['amount'],
+            'client_ip': user['client_ip']
         }
     )
 
