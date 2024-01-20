@@ -6,9 +6,8 @@ from flask_cors import CORS
 import socket
 import time
 from threading import Thread
-import json
 import os
-from constants import REALTIME_ANALYTICS, HIGHEST_BIDDERS, TIMER
+from constants import BID, HIGHEST_BIDDERS, TIMER
 from consumer import MyKafkaConsumer
 from producer import MyKafkaProducer
 
@@ -29,7 +28,7 @@ server_ip = socket.gethostbyname(host_name)
 timerConsumer = MyKafkaConsumer(TIMER, public_ip, kafka_server_port) 
 highestBidderConsumer = MyKafkaConsumer(HIGHEST_BIDDERS, public_ip, kafka_server_port)
 # myConsumer = MyKafkaConsumer(topic,'54.226.89.103', kafka_server_port) 
-myProducer = MyKafkaProducer(REALTIME_ANALYTICS, public_ip, kafka_server_port) 
+myProducer = MyKafkaProducer(BID, public_ip, kafka_server_port) 
 # myProducer = MyKafkaProducer(topic,'54.226.89.103', kafka_server_port) 
 
 class AuctionSubmissionForm(Form):
@@ -74,6 +73,13 @@ def index():
 def thankyou():
     Thread(target = refresh_highest_bidders).start()
     return render_template('thankyou.html')
+
+@application.route('/highest-bidder', methods=['GET'])
+def getHighestBidder():
+    global highest_bidders
+
+    response = jsonify(highest_bidders[0])
+    return response
 
 if __name__ == '__main__':
     socketio.run(application, host='0.0.0.0', port=8000)

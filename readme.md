@@ -30,19 +30,6 @@
 5. Install pip3: sudo apt install python3-pip
 6. Install dependencies: pip3 install -r requirements.txt
 
-# Configure websockets in nginx
-1. Access the deployed application folder by sshing into your EC2 instance: /var/app/current 
-2. Create the following directory: mkdir .ebextensions
-3. Cd into the .ebextensions folder: cd .ebextensions/
-4. Enter the following configuration: `container_commands:
-  enable_websockets:
-    command: |
-      sed -i '/\s*proxy_set_header\s*Connection/c \
-              proxy_set_header Upgrade $http_upgrade;\
-              proxy_set_header Connection "upgrade";\
-              '
-/tmp/deployment/config/#etc#nginx#conf.d#00_elastic_beanstalk_proxy.conf`
-
 # Setup python application (Beanstalk)
 1. run the following command: `pip3 install -r requirements.txt`
 the previous command will install kafka-python (a kafka client for python) and flask (a minimalistic web framework to create rest APIs and web applications).

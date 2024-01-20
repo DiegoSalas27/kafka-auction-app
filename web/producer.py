@@ -17,8 +17,8 @@ class MyKafkaProducer:
 
         data = {
             'email': email,
-            'amount': amount,
-            'client_ip': client_ip
+            'amount': str(amount),
+            'client_ip': str(client_ip)
         }
 
         

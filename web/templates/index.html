@@ -26,7 +26,7 @@
   </head>
   {% block body %}
   <body style="background: rgb(255, 255, 255)">
-    <header class="masthead text-white text-center" style="height: 100vh;">
+    <header class="masthead text-white text-center" style="height: 100vh">
       <div
         class="overlay"
         style="background: url({{url_for('static', filename='img/bg-showcase-2.jpg')}});"
@@ -37,13 +37,17 @@
         ></figure>
       </div>
       <div class="container">
-        <div class="row">
+        <div id="row-container" class="row">
           <div class="col-xl-9 mx-auto">
             <h1 class="mb-5">Coffeeless Programming<br />Voucher Auction</h1>
             <p>From server: {{server_ip}}</p>
           </div>
-          <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-            <form method="POST" action="" style="display:flex; flex-direction: column; align-items: center;">
+          <div id="main-form" class="col-md-10 col-lg-8 col-xl-7 mx-auto" style="justify-content: center;">
+            <form
+              method="POST"
+              action=""
+              style="display: flex; flex-direction: column; align-items: center"
+            >
               <div class="form-row mb-2">
                 <div class="mb-2 mb-md-0">
                   {{form.email(class_='shadow-sm form-control
@@ -81,13 +85,47 @@
     <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
     <script>
-      var socket = io.connect(window.location.origin);
-      console.log('ORIGIN', window.location.origin)
-      // Event handler for receiving data updates
-      socket.on('update_timer', function(data) {
-          var timer = document.getElementById('timer');
-          timer.textContent = 'Time remaining: ' + data + ' seconds'
-      });
+            var socket = io.connect(window.location.origin);
+
+            var myData;
+
+            // Event handler for receiving data updates
+            socket.on('update_timer', async function(data) {
+                var timer = document.getElementById('timer');
+                timer.textContent = 'Time remaining: ' + data + ' seconds'
+
+                myData = data
+
+                if (data === 1) {
+                  await fetchTime()
+                }
+            });
+
+            if (myData === 1) {
+              (async () => {
+                await fetchTime()
+              })()
+            } 
+
+            async function fetchTime() {
+              var formNode = document.getElementById('main-form');
+              formNode.remove();
+
+              console.log('Sending highest bidder request')
+
+              try {
+                let response = await fetch(window.location.origin + '/highest-bidder');
+                const highestBidder = await response.json();
+                console.log(highestBidder)
+
+                var rowNode = document.getElementById('row-container');
+                let h1Node = document.createElement('h1');
+                h1Node.textContent = 'Winner: ' + highestBidder.email
+                rowNode.append(h1Node)
+              } catch (err) {
+                console.log(err);
+              }
+            }
     </script>
   </body>
 </html>
