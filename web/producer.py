@@ -9,17 +9,18 @@ class MyKafkaProducer:
         self.public_ip = public_ip
         self.port = port
 
-    def produce(self) -> None:
+    def produce(self, email: str, amount: str, client_ip: str) -> None:
         producer = KafkaProducer(
             bootstrap_servers=f'{self.public_ip}:{self.port}',
             value_serializer=lambda v: json.dumps(v).encode('utf-8')
         )
 
-        while True:
-            data = {
-                'timestamp': time.time(),
-                'value': random.randint(1, 100)
-            }
-            print(f"Producing data: {data}")
-            producer.send(self.topic, value=data)
-            time.sleep(1)
+        data = {
+            'email': email,
+            'amount': str(amount),
+            'client_ip': str(client_ip)
+        }
+
+        
+        print(f"Producing data: {data}")
+        producer.send(self.topic, value=data)
