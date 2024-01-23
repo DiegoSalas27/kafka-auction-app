@@ -25,7 +25,7 @@ def kafka_highest_bidder_consumer():
     for message in highestBidderConsumer.getConsumer():
         highest_bidders.append(message.value)
         put_user(message.value)
-        highest_bidders.sort(key=lambda x: x['amount'], reverse=True)
+        highest_bidders.sort(key=lambda x: (len (x['amount']), x['amount']), reverse=True)
         if len(highest_bidders) > 5: # Keeping the last 5 data points
             highest_bidders.pop()
         highestBidderProducer.produce(highest_bidders)
@@ -51,7 +51,7 @@ def put_user(user):
     )
 
 threading.Thread(target = kafka_highest_bidder_consumer).start()
-threading.Thread(target = syncTime, args=(10,)).start()
+threading.Thread(target = syncTime, args=(60,)).start()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000) # This will make the Flask app accessible via the EC2's public IP

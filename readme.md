@@ -18,10 +18,11 @@
 2. Start Zookeeper: ./bin/zookeeper-server-start.sh config/zookeeper.properties
 3. Start Kafka Server: ./bin/kafka-server-start.sh config/server.properties
 
-# Create a topic
+# Create topics
 1. Make sure you are in the root of kafka folder. eg: /Users/diegosalas/kafka_2.13-3.1.0
-2. Enter the following command: ./bin/kafka-topics.sh --create --topic realtime-analytics --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1
-
+2. Enter the following command: ./bin/kafka-topics.sh --create --topic bid --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1
+3. Enter the following command: ./bin/kafka-topics.sh --create --topic timer --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1
+4. Enter the following command: ./bin/kafka-topics.sh --create --topic highest-bidders --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1
 # Installing kafka server EC2
 1. download source code: wget https://medium-4-eb.s3.amazonaws.com/kafka-server.zip
 2. Install unzip: sudo apt install unzip
